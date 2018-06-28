@@ -4,9 +4,9 @@ from torch import nn
 from torch import optim
 
 
-class oneOperation(torch.nn.Module):
+class twoTransformations(torch.nn.Module):
     def __init__(self, inputd, hiddend, outputd):
-        super(oneOperation, self).__init__()
+        super(twoTransformations, self).__init__()
         self.mat1 = torch.nn.Linear(inputd, hiddend, bias=False)
         self.mat2 = torch.nn.Linear(hiddend, outputd, bias=False)
 
@@ -37,13 +37,45 @@ def handle_all_trials(x, N, din, dowt):
         holder[inx, :] = holder[inx,:]*dummy_function(row)
 
     return holder
+
+
+def train(g, x, y, epochs):
+    loss = nn.MSELoss()
+    optimizer = optim.SGD(g.parameters(), lr=.001)
+    llog = []
+    testllog = []
+
+    for epoch in range(epochs):
+        y_pred = g(x)
+        output = loss(y_pred, y)
+        optimizer.zero_grad()
+        output.backward()
+        optimizer.step()
+
+        N = x.size()[0]
+        din = x.size()[1]
+        dowt = y.size()[1]
         
+        testx = torch.randn(N, din)
+        testy = handle_all_trials(testx, N, din, dowt)
+        testy_pred = g(testx)
+        testoutput = loss(testy_pred, testy)
+
+        if epoch%100 == 0:
+            llog.append(round(output.item(), 2))
+            testllog.append(round(testoutput.item(), 2))
+            l = str(round(output.item(), 2))
+            lt = str(round(testoutput.item(), 2))
+            print('{:<15}:{}'.format('Training Error', l))
+            print('{:<15}:{}'.format('Testing Error', lt))
+            print()
+
         
 if __name__ == "__main__":
     N, din, dowt, dhidden = 1000, 10, 2, 5
     epochs = 500
 
-    g = oneOperation(din, dhidden, dowt)
+    g = twoTransformations(din, dhidden, dowt)
     x = torch.randn(N, din)
     y = handle_all_trials(x, N, din, dowt)
 
