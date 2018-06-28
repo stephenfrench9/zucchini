@@ -1,8 +1,7 @@
+import matplotlib.pyplot as plt
 import torch
 from torch import nn
 from torch import optim
-
-import matplotlib.pyplot as plt
 
 
 class oneOperation(torch.nn.Module):
@@ -28,7 +27,6 @@ def dummy_function(grass):
     second_sum = torch.cumsum(second[0:5],dim=0)
     b = second_sum[-1]*second[4]
     return torch.tensor([a.item(), b.item()])
-
 
 
 def handle_all_trials(x, N, din, dowt):
@@ -66,8 +64,6 @@ if __name__ == "__main__":
         testy_pred = g(testx)
         testoutput = loss(testy_pred, testy)
 
-
-        
         if epoch%100 == 0:
             llog.append(round(output.item(), 2))
             testllog.append(round(testoutput.item(), 2))
