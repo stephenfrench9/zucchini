@@ -70,6 +70,20 @@ def train(g, x, y, epochs):
             print('{:<15}:{}'.format('Testing Error', lt))
             print()
 
+
+    plt.figure(1)
+    plt.title("train, " + str(N) + " trials")
+    plt.xlabel("input dimension: " + str(din))
+    plt.ylabel(str(epochs) + " epochs")
+    plt.plot(llog)
+
+    plt.figure(2)
+    plt.title("test, " + str(N) +" trials")
+    plt.xlabel("input dimension: " + str(din))
+    plt.ylabel(str(epochs) + " epochs")
+    plt.plot(testllog)
+    plt.show()
+            
         
 if __name__ == "__main__":
     N, din, dowt, dhidden = 1000, 10, 2, 5
