@@ -1,3 +1,4 @@
+from fit import display
 from fit import train
 from fit import twoTransformations
 from fit import handle_all_trials
@@ -24,7 +25,7 @@ if __name__ == "__main__":
     llog, testllog = train(f, x, y, epochs, lr, N, din, dowt)
     slope = linregress(range(len(testllog)), testllog)
 
-    display(llog, testllog)
+    display(llog, testllog, epochs, lr, N, din)
 
     testn = 10
 

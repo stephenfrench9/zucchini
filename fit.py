@@ -74,7 +74,7 @@ def train(g, x, y, epochs, lr, N, din, dowt):
     return llog, testllog
 
 
-def display(llog, testllog):
+def display(llog, testllog, epochs, lr, N, din):
     domain = range(len(testllog))
     slope,  inter,  r,  p,  err  = linregress(domain, llog)
     slopet, intert, rt, pt, errt = linregress(domain, testllog)
@@ -112,7 +112,7 @@ if __name__ == "__main__":
 
     llog, testllog = train(g, x, y, epochs, lr, N, din, dowt)
 
-    display(llog, testllog)
+    display(llog, testllog, epochs, lr, N, din)
 
 ## make a new customized module class. This class can be used to apply a linear transformation to a pytorch tensor.
 
