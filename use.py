@@ -3,6 +3,7 @@ from fit import twoTransformations
 from fit import handle_all_trials
 from fit import dummy_function
 import matplotlib.pyplot as plt
+from scipy.stats import linregress
 import torch
 
 
@@ -13,16 +14,17 @@ import torch
 
 if __name__ == "__main__":
     N, din, dowt, dhidden = 1000, 10, 2, 5
-    epochs = 5000
+    epochs, lr = 201, .001
 
     r = twoTransformations(din, dhidden, dowt)
     f = twoTransformations(din, dhidden, dowt)
     x = torch.randn(N, din)
     y = handle_all_trials(x, N, din, dowt)
 
-#    train(f, x, y, epochs)
-
-    testn = 1000
+    llog, testllog = train(f, x, y, epochs, lr, N, din, dowt)
+    slope = linregress(range(len(testllog)), testllog)
+    
+    testn = 10
 
     zoom = torch.randn(testn, din)
     zoomt = handle_all_trials(zoom, testn, din, dowt)
@@ -40,13 +42,14 @@ if __name__ == "__main__":
 
 
 
-    plt.scatter(truex, truey, marker='8')
-    plt.scatter(rx, ry, marker='x')
-    plt.scatter(fx, fy, marker='+')
+    plt.scatter(truex, truey, facecolors='none', edgecolors='r')
+    plt.scatter(rx, ry, marker='x', s=20)
+    plt.scatter(fx, fy, marker='.', s=20)
     plt.show()
 
 
-    
+    performance = (round(slope.slope, 3), N, din)
+    print(performance)
  
 #   go ahead and assume that you have your two models. 
     

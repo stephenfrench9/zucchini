@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from scipy.stats import linregress
 import torch
 from torch import nn
 from torch import optim
@@ -39,7 +40,7 @@ def handle_all_trials(x, N, din, dowt):
     return holder
 
 
-def train(g, x, y, epochs):
+def train(g, x, y, epochs, lr, N, din, dowt):
     loss = nn.MSELoss()
     optimizer = optim.SGD(g.parameters(), lr=.001)
     llog = []
@@ -70,68 +71,49 @@ def train(g, x, y, epochs):
             print('{:<15}:{}'.format('Testing Error', lt))
             print()
 
+    return llog, testllog
 
+
+def display(llog, testllog):
+    domain = range(len(testllog))
+    slope,  inter,  r,  p,  err  = linregress(domain, llog)
+    slopet, intert, rt, pt, errt = linregress(domain, testllog)
+
+    slope, inter = round(slope, 3), round(inter, 3)
+    slopet, intert = round(slopet, 3), round(intert, 3)
+    
     plt.figure(1)
-    plt.title("train, " + str(N) + " trials")
-    plt.xlabel("input dimension: " + str(din))
-    plt.ylabel(str(epochs) + " epochs")
+    plt.title("Training Loss" )
+    plt.xlabel("slope: {}\nintercept: {}".format(slope, inter))
+    plt.ylabel("{} epochs, {} learn rate, {} trials, {} input features"
+               .format(epochs, lr, N, din))
+    plt.plot(domain, slope*domain + inter)
     plt.plot(llog)
 
+
     plt.figure(2)
-    plt.title("test, " + str(N) +" trials")
-    plt.xlabel("input dimension: " + str(din))
-    plt.ylabel(str(epochs) + " epochs")
+    plt.title("Testing Loss" )
+    plt.xlabel("slope: {}\nintercept: {}".format(slopet, intert))
+    plt.ylabel("{} epochs, {} learn rate, {} trials, {} input features"
+               .format(epochs, lr, N, din))
+    plt.plot(domain, slopet*domain + intert)
     plt.plot(testllog)
+
     plt.show()
-            
+    
         
 if __name__ == "__main__":
     N, din, dowt, dhidden = 1000, 10, 2, 5
-    epochs = 500
+    epochs, lr = 201, .001
 
     g = twoTransformations(din, dhidden, dowt)
     x = torch.randn(N, din)
     y = handle_all_trials(x, N, din, dowt)
 
-    loss = nn.MSELoss()
-    optimizer = optim.SGD(g.parameters(), lr=.001)
-    llog = []
-    testllog = []
+    llog, testllog = train(g, x, y, epochs, lr, N, din, dowt)
 
-    for epoch in range(epochs):
-        y_pred = g(x)
-        output = loss(y_pred, y)
-        optimizer.zero_grad()
-        output.backward()
-        optimizer.step()
+    display(llog, testllog)
 
-        testx = torch.randn(N, din)
-        testy = handle_all_trials(testx, N, din, dowt)
-        testy_pred = g(testx)
-        testoutput = loss(testy_pred, testy)
-
-        if epoch%100 == 0:
-            llog.append(round(output.item(), 2))
-            testllog.append(round(testoutput.item(), 2))
-            l = str(round(output.item(), 2))
-            lt = str(round(testoutput.item(), 2))
-            print('{:<15}:{}'.format('Training Error', l))
-            print('{:<15}:{}'.format('Testing Error', lt))
-            print()
-
-
-    plt.figure(1)
-    plt.title("train, " + str(N) + " trials")
-    plt.xlabel("input dimension: " + str(din))
-    plt.ylabel(str(epochs) + " epochs")
-    plt.plot(llog)
-
-    plt.figure(2)
-    plt.title("test, " + str(N) +" trials")
-    plt.xlabel("input dimension: " + str(din))
-    plt.ylabel(str(epochs) + " epochs")
-    plt.plot(testllog)
-    plt.show()
 ## make a new customized module class. This class can be used to apply a linear transformation to a pytorch tensor.
 
 ## why subclass the module class? Why not just use the Linear class to get a linear transformation object and then apply the transformation? Same effect.
