@@ -23,7 +23,9 @@ if __name__ == "__main__":
 
     llog, testllog = train(f, x, y, epochs, lr, N, din, dowt)
     slope = linregress(range(len(testllog)), testllog)
-    
+
+    display(llog, testllog)
+
     testn = 10
 
     zoom = torch.randn(testn, din)
