@@ -14,8 +14,8 @@ import torch
             
 
 if __name__ == "__main__":
-    N, din, dowt, dhidden = 1000, 10, 2, 5
-    epochs, lr = 201, .001
+    N, din, dowt, dhidden = 201, 10, 2, 5
+    epochs, lr = 5001, .001
 
     r = twoTransformations(din, dhidden, dowt)
     f = twoTransformations(din, dhidden, dowt)
@@ -26,7 +26,7 @@ if __name__ == "__main__":
     slope = linregress(range(len(testllog)), testllog)
 
     display(llog, testllog, epochs, lr, N, din)
-
+    
     testn = 10
 
     zoom = torch.randn(testn, din)
@@ -48,23 +48,15 @@ if __name__ == "__main__":
     plt.scatter(truex, truey, facecolors='none', edgecolors='r')
     plt.scatter(rx, ry, marker='x', s=20)
     plt.scatter(fx, fy, marker='.', s=20)
+    plt.title("Predictive Performance")
+    plt.xlabel("N: {}, din: {}, slope: {}".format(N, din, slope.slope))
+    plt.ylabel("epochs: {}, lr: {}, dhidden: {}".format(epochs, lr, dhidden))
     plt.show()
 
 
-    performance = (round(slope.slope, 3), N, din)
+    performance = (N, din, round(slope.slope, 3))
     print(performance)
  
-#   go ahead and assume that you have your two models. 
-    
-#    display_weights(r, f)
 
-#    x = torch.randn(N, din)
-#    y = handle_all_cases(x)
-    
-#    yr = r(x)
-#    yf = f(x)
-
-   # plot(y, yr)
-   # plot(y, yf)
 
     

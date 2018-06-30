@@ -69,6 +69,7 @@ def train(g, x, y, epochs, lr, N, din, dowt):
             lt = str(round(testoutput.item(), 2))
             print('{:<15}:{}'.format('Training Error', l))
             print('{:<15}:{}'.format('Testing Error', lt))
+            print('progress: {}'.format(round(epoch/epochs,2)))
             print()
 
     return llog, testllog
@@ -84,8 +85,8 @@ def display(llog, testllog, epochs, lr, N, din):
     
     plt.figure(1)
     plt.title("Training Loss" )
-    plt.xlabel("slope: {}\nintercept: {}".format(slope, inter))
-    plt.ylabel("{} epochs, {} learn rate, {} trials, {} input features"
+    plt.xlabel("slope: {}, intercept: {}".format(slope, inter))
+    plt.ylabel("{} epochs, {} learn rate\n, {} trials, {} inputs"
                .format(epochs, lr, N, din))
     plt.plot(domain, slope*domain + inter)
     plt.plot(llog)
@@ -93,8 +94,8 @@ def display(llog, testllog, epochs, lr, N, din):
 
     plt.figure(2)
     plt.title("Testing Loss" )
-    plt.xlabel("slope: {}\nintercept: {}".format(slopet, intert))
-    plt.ylabel("{} epochs, {} learn rate, {} trials, {} input features"
+    plt.xlabel("slope: {}, intercept: {}".format(slopet, intert))
+    plt.ylabel("{} epochs, {} learn rate\n {} trials, {} inputs"
                .format(epochs, lr, N, din))
     plt.plot(domain, slopet*domain + intert)
     plt.plot(testllog)
