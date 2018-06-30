@@ -14,7 +14,7 @@ import torch
             
 
 if __name__ == "__main__":
-    N, din, dowt, dhidden = 201, 10, 2, 5
+    N, din, dowt, dhidden = 101, 10, 2, 5
     epochs, lr = 5001, .001
 
     r = twoTransformations(din, dhidden, dowt)
@@ -49,7 +49,8 @@ if __name__ == "__main__":
     plt.scatter(rx, ry, marker='x', s=20)
     plt.scatter(fx, fy, marker='.', s=20)
     plt.title("Predictive Performance")
-    plt.xlabel("N: {}, din: {}, slope: {}".format(N, din, slope.slope))
+    plt.xlabel("N: {}, din: {}, slope: {}"
+               .format(N, din, round(slope.slope, 3)))
     plt.ylabel("epochs: {}, lr: {}, dhidden: {}".format(epochs, lr, dhidden))
     plt.show()
 
