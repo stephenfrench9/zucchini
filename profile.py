@@ -7,9 +7,11 @@ import matplotlib.pyplot as plt
 import torch
 
 def fit_data(N, din, dowt, dhidden, lr, epochs):
-
+    device = torch.device("cuda:0")
+    
     f = twoTransformations(din, dhidden, dowt)
-    x = torch.randn(N, din)
+    f.cuda()
+    x = torch.randn(N, din, device = device)
     y = handle_all_trials(x, N, din, dowt)
 
     llog, testllog = train(f, x, y, epochs, lr, N, din, dowt, True)

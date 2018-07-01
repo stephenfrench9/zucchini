@@ -21,17 +21,19 @@ class twoTransformations(torch.nn.Module):
 
 
 def dummy_function(grass):
+    device = torch.device("cuda:0")
     first = grass[:5]
     second = grass[5:10]
     first_sum = torch.cumsum(first[0:5],dim=0)
     a = first_sum[-1]*first[4]
     second_sum = torch.cumsum(second[0:5],dim=0)
     b = second_sum[-1]*second[4]
-    return torch.tensor([a.item(), b.item()])
+    return torch.tensor([a.item(), b.item()], device = device)
 
 
 def handle_all_trials(x, N, din, dowt):
-    raw_tensor_object = torch.tensor((), dtype=torch.float32)
+    device = torch.device("cuda:0")
+    raw_tensor_object = torch.tensor((), dtype=torch.float32, device=device)
     holder = raw_tensor_object.new_ones((N, dowt))
 
     for inx, row in enumerate(x):
@@ -45,7 +47,8 @@ def train(g, x, y, epochs, lr, N, din, dowt, disp_prog):
     optimizer = optim.SGD(g.parameters(), lr=.001)
     llog = []
     testllog = []
-
+    device = torch.device("cuda:0")
+    
     for epoch in range(epochs):
         y_pred = g(x)
         output = loss(y_pred, y)
@@ -57,7 +60,7 @@ def train(g, x, y, epochs, lr, N, din, dowt, disp_prog):
         din = x.size()[1]
         dowt = y.size()[1]
         
-        testx = torch.randn(N, din)
+        testx = torch.randn(N, din, device = device)
         testy = handle_all_trials(testx, N, din, dowt)
         testy_pred = g(testx)
         testoutput = loss(testy_pred, testy)
