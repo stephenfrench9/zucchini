@@ -44,4 +44,5 @@ if __name__ == '__main__':
               .format(lr, epochs))
     plt.xlabel("Trials: x, din: {}, dowt: {}".format(din, dowt))
     plt.ylabel("Slope: y, dhidden: {}".format(dhidden))
-    plt.show()
+    plt.savefig("thisis")
+    
