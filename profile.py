@@ -12,7 +12,7 @@ def fit_data(N, din, dowt, dhidden, lr, epochs):
     x = torch.randn(N, din)
     y = handle_all_trials(x, N, din, dowt)
 
-    llog, testllog = train(f, x, y, epochs, lr, N, din, dowt, False)
+    llog, testllog = train(f, x, y, epochs, lr, N, din, dowt, True)
     slope = linregress(range(len(testllog)), testllog)
     
     return slope.slope
@@ -26,7 +26,8 @@ def run_all(sizes, din, dowt, dhidden, lr, epochs):
     for inx, N in enumerate(sizes):
        slope =  fit_data(N, din, dowt, dhidden, lr, epochs)
        slopes.append(slope)
-       print("Progress: {}".format(round((inx+1)/len(sizes),2)))
+       print("NN Trained********************Overall Progress: {}"
+             .format(round((inx+1)/len(sizes),2)))
     return slopes
 
        
