@@ -40,7 +40,7 @@ def handle_all_trials(x, N, din, dowt):
     return holder
 
 
-def train(g, x, y, epochs, lr, N, din, dowt):
+def train(g, x, y, epochs, lr, N, din, dowt, disp_prog):
     loss = nn.MSELoss()
     optimizer = optim.SGD(g.parameters(), lr=.001)
     llog = []
@@ -67,10 +67,11 @@ def train(g, x, y, epochs, lr, N, din, dowt):
             testllog.append(round(testoutput.item(), 2))
             l = str(round(output.item(), 2))
             lt = str(round(testoutput.item(), 2))
-            print('{:<15}:{}'.format('Training Error', l))
-            print('{:<15}:{}'.format('Testing Error', lt))
-            print('progress: {}'.format(round(epoch/epochs,2)))
-            print()
+            if disp_prog:
+                print('{:<15}:{}'.format('Training Error', l))
+                print('{:<15}:{}'.format('Testing Error', lt))
+                print('progress: {}'.format(round(epoch/epochs,2)))
+                print()
 
     return llog, testllog
 

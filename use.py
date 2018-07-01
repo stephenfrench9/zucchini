@@ -3,8 +3,9 @@ from fit import train
 from fit import twoTransformations
 from fit import handle_all_trials
 from fit import dummy_function
-import matplotlib.pyplot as plt
 from scipy.stats import linregress
+
+import matplotlib.pyplot as plt
 import torch
 
 
@@ -14,7 +15,7 @@ import torch
             
 
 if __name__ == "__main__":
-    N, din, dowt, dhidden = 101, 10, 2, 5
+    N, din, dowt, dhidden = 25, 10, 2, 5
     epochs, lr = 5001, .001
 
     r = twoTransformations(din, dhidden, dowt)
