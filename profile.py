@@ -24,7 +24,7 @@ def init_weights(m):
 
 def fit_data(N, din, dowt, dhidden, lr, epochs, device):
 
-    print("Fittinig a Brand Shiny New Shiny shiny new neural net")
+    print("Given an N, generating data and fittinig a NEW neural net.")
 # apply(init_weights)
     f = twoTransformations(din, dhidden, dowt)
     x = torch.randn(N, din, device = device)
