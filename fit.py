@@ -20,8 +20,8 @@ class twoTransformations(torch.nn.Module):
         return y_pred
 
 
-def dummy_function(grass):
-    device = torch.device("cuda:0")
+def dummy_function(grass, device):
+
     first = grass[:5]
     second = grass[5:10]
     first_sum = torch.cumsum(first[0:5],dim=0)
@@ -31,23 +31,22 @@ def dummy_function(grass):
     return torch.tensor([a.item(), b.item()], device = device)
 
 
-def handle_all_trials(x, N, din, dowt):
-    device = torch.device("cuda:0")
+def handle_all_trials(x, N, din, dowt, device):
+
     raw_tensor_object = torch.tensor((), dtype=torch.float32, device=device)
     holder = raw_tensor_object.new_ones((N, dowt))
 
     for inx, row in enumerate(x):
-        holder[inx, :] = holder[inx,:]*dummy_function(row)
+        holder[inx, :] = holder[inx,:]*dummy_function(row, device)
 
     return holder
 
 
-def train(g, x, y, epochs, lr, N, din, dowt, disp_prog):
+def train(g, x, y, epochs, lr, N, din, dowt, device, disp_prog):
     loss = nn.MSELoss()
     optimizer = optim.SGD(g.parameters(), lr=.001)
     llog = []
     testllog = []
-    device = torch.device("cuda:0")
     
     for epoch in range(epochs):
         y_pred = g(x)
@@ -61,7 +60,7 @@ def train(g, x, y, epochs, lr, N, din, dowt, disp_prog):
         dowt = y.size()[1]
         
         testx = torch.randn(N, din, device = device)
-        testy = handle_all_trials(testx, N, din, dowt)
+        testy = handle_all_trials(testx, N, din, dowt, device)
         testy_pred = g(testx)
         testoutput = loss(testy_pred, testy)
 
@@ -108,6 +107,9 @@ def display(llog, testllog, epochs, lr, N, din):
     
         
 if __name__ == "__main__":
+    #    device = torch.device("cuda:0")
+    device = torch.device("cpu")
+
     N, din, dowt, dhidden = 1000, 10, 2, 5
     epochs, lr = 201, .001
 
@@ -115,7 +117,7 @@ if __name__ == "__main__":
     x = torch.randn(N, din)
     y = handle_all_trials(x, N, din, dowt)
 
-    llog, testllog = train(g, x, y, epochs, lr, N, din, dowt)
+    llog, testllog = train(g, x, y, epochs, lr, N, din, dowt, device, True)
 
     display(llog, testllog, epochs, lr, N, din)
 
