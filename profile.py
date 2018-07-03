@@ -46,7 +46,7 @@ if __name__ == '__main__':
     device = torch.device("cuda:0") #choose hardware
 #    device = torch.device("cpu")
 
-    sizes = [25*i+25 for i in range(40)]
+    sizes = [25*i+25 for i in range(80)]
     t0 = time.time()
     slopes = run_all(sizes, din, dowt, dhidden, lr, epochs, device)
     print("total elapsed time: ")
