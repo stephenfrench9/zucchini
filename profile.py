@@ -2,6 +2,7 @@ from fit import handle_all_trials
 from fit import train
 from fit import twoTransformations
 from scipy.stats import linregress
+import time
 
 import matplotlib.pyplot as plt
 import torch
@@ -11,6 +12,7 @@ def fit_data(N, din, dowt, dhidden, lr, epochs, device):
     generate new model, generate new data. Fit it.
     """
     f = twoTransformations(din, dhidden, dowt)
+#    f.cuda()
     x = torch.randn(N, din, device = device)
     y = handle_all_trials(x, N, din, dowt, device)
 
@@ -45,9 +47,11 @@ if __name__ == '__main__':
 #    device = torch.device("cuda:0") #choose hardware
     device = torch.device("cpu")
 
-    sizes = [25*i+25 for i in range(3)]
+    sizes = [25*i+25 for i in range(40)]
+    t0 = time.time()
     slopes = run_all(sizes, din, dowt, dhidden, lr, epochs, device)
-
+    print("This is how much time it took to do N = 1000: ")
+    print(time.time() - t0)
     plt.plot(sizes, slopes)
     plt.title("Test Loss Slope vs. Number of Trials\nlr: {}, epochs: {}"
               .format(lr, epochs))
