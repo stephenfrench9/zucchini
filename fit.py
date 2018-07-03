@@ -47,6 +47,11 @@ def train(g, x, y, epochs, lr, N, din, dowt, device, disp_prog):
     optimizer = optim.SGD(g.parameters(), lr=.001)
     llog = []
     testllog = []
+
+    testx = torch.randn(N, din, device = device)
+    testy = handle_all_trials(testx, N, din, dowt, device)
+    testy_pred = g(testx)
+
     
     for epoch in range(epochs):
         y_pred = g(x)
@@ -59,9 +64,6 @@ def train(g, x, y, epochs, lr, N, din, dowt, device, disp_prog):
         din = x.size()[1]
         dowt = y.size()[1]
         
-        testx = torch.randn(N, din, device = device)
-        testy = handle_all_trials(testx, N, din, dowt, device)
-        testy_pred = g(testx)
         testoutput = loss(testy_pred, testy)
 
         if epoch%100 == 0:
