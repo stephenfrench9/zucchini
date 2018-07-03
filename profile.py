@@ -12,7 +12,8 @@ def fit_data(N, din, dowt, dhidden, lr, epochs, device):
     generate new model, generate new data. Fit it.
     """
     f = twoTransformations(din, dhidden, dowt)
-#   f.cuda()
+    f.cuda()
+
     x = torch.randn(N, din, device = device)
     y = handle_all_trials(x, N, din, dowt, device)
 
@@ -42,10 +43,8 @@ if __name__ == '__main__':
     din, dowt = 10, 2 #Data shape
     dhidden = 5 #neural network architechture
     lr, epochs = .001, 5001 #Training parameters
-    d = twoTransformations(din, dhidden, dowt) #dummy module
-#    d.cuda()
-#    device = torch.device("cuda:0") #choose hardware
-    device = torch.device("cpu")
+    device = torch.device("cuda:0") #choose hardware
+#    device = torch.device("cpu")
 
     sizes = [25*i+25 for i in range(40)]
     t0 = time.time()

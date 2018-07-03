@@ -50,7 +50,7 @@ def train(g, x, y, epochs, lr, N, din, dowt, device, disp_prog):
 
     testx = torch.randn(N, din, device = device)
     testy = handle_all_trials(testx, N, din, dowt, device)
-    testy_pred = g(testx)
+
 
     
     for epoch in range(epochs):
@@ -63,7 +63,7 @@ def train(g, x, y, epochs, lr, N, din, dowt, device, disp_prog):
         N = x.size()[0]
         din = x.size()[1]
         dowt = y.size()[1]
-        
+        testy_pred = g(testx)        
         testoutput = loss(testy_pred, testy)
 
         if epoch%100 == 0:
