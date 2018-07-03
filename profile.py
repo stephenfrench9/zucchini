@@ -13,6 +13,7 @@ def fit_data(N, din, dowt, dhidden, lr, epochs, device):
     """
     f = twoTransformations(din, dhidden, dowt)
 #    f.cuda()
+
     x = torch.randn(N, din, device = device)
     y = handle_all_trials(x, N, din, dowt, device)
 
@@ -50,8 +51,14 @@ if __name__ == '__main__':
     sizes = [25*i+25 for i in range(40)]
     t0 = time.time()
     slopes = run_all(sizes, din, dowt, dhidden, lr, epochs, device)
+<<<<<<< HEAD
     print("This is how much time it took to do N = 1000: ")
     print(time.time() - t0)
+=======
+    print("total elapsed time: ")
+    print(time.time()-t0)
+    
+>>>>>>> 6067892214df3364b24268a5ab3afea65b9db45b
     plt.plot(sizes, slopes)
     plt.title("Test Loss Slope vs. Number of Trials\nlr: {}, epochs: {}"
               .format(lr, epochs))
