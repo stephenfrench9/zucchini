@@ -41,9 +41,9 @@ if __name__ == '__main__':
     dhidden = 5 #neural network architechture
     lr, epochs = .001, 5001 #Training parameters
     d = twoTransformations(din, dhidden, dowt) #dummy module
-#    d.cuda()
-#    device = torch.device("cuda:0") #choose hardware
-    device = torch.device("cpu")
+    d.cuda()
+    device = torch.device("cuda:0") #choose hardware
+#    device = torch.device("cpu")
 
     sizes = [25*i+25 for i in range(3)]
     slopes = run_all(sizes, din, dowt, dhidden, lr, epochs, device)
