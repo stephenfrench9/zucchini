@@ -2,9 +2,10 @@ from fit import handle_all_trials
 from fit import train
 from fit import twoTransformations
 from scipy.stats import linregress
-import time
 
+import time
 import matplotlib.pyplot as plt
+import numpy as np
 import torch
 
 def fit_data(N, din, dowt, dhidden, lr, epochs, device):
@@ -49,16 +50,43 @@ if __name__ == '__main__':
     sizes = [25*i+25 for i in range(3)]
     t0 = time.time()
 
-    for expe in range(10):
+    dataset = []
+    experiments = 3
+    for expe in range(experiments):
         slopes = run_all(sizes, din, dowt, dhidden, lr, epochs, device)
         print("total elapsed time: ")
         print(time.time()-t0)
-        print("Profile prog" + str(expe/10))
-    
+        print("Profile prog" + str(expe/experiments))
+        dataset.append(np.array(slopes))
+        
+    cumsum = np.zeros(dataset[0].size)
+    for it in dataset:
+        cumsum = cumsum + it
+    cumsum = cumsum/experiments
+        
+        
+    for inx, slopes in enumerate(dataset):
         plt.plot(sizes, slopes)
         plt.title("Test Loss Slope vs. Number of Trials\nlr: {}, epochs: {}"
                   .format(lr, epochs))
         plt.xlabel("Trials: x, din: {}, dowt: {}".format(din, dowt))
         plt.ylabel("Slope: y, dhidden: {}".format(dhidden))
-        plt.savefig("prof"+str(expe))
+        plt.savefig("prof"+str(inx))
+
+    plt.figure(1)
+    plt.plot(sizes, cumsum)
+    plt.title("Avg Test Slope vs. Number of Trials\nlr: {}, epochs: {}"
+              .format(lr, epochs))
+    plt.xlabel("Trials: x, din: {}, dowt: {}".format(din, dowt))
+    plt.ylabel("Slope: y, dhidden: {}".format(dhidden))
+    plt.savefig("average")
+        
+
+
+    
+    print(dataset[0])
+    print(dataset[1])
+    print(dataset[2])
+    print(cumsum)
+        
     
