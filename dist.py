@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
     N = 200
     slopes = []
-    for N in range(10):
+    for N in range(1000):
         N = N + 1
         print(N)
         rv = slope(N, din, dowt, dhidden, lr, epochs, device)
