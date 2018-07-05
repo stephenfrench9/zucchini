@@ -51,7 +51,7 @@ if __name__ == '__main__':
     t0 = time.time()
 
     dataset = []
-    experiments = 10
+    experiments = 20
     for expe in range(experiments):
         slopes = run_all(sizes, din, dowt, dhidden, lr, epochs, device)
         print("total elapsed time: ")
