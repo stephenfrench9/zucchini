@@ -66,6 +66,7 @@ if __name__ == '__main__':
         
         
     for inx, slopes in enumerate(dataset):
+        plt.figure(1)
         plt.plot(sizes, slopes)
         plt.title("Test Loss Slope vs. Number of Trials\nlr: {}, epochs: {}"
                   .format(lr, epochs))
@@ -73,8 +74,8 @@ if __name__ == '__main__':
         plt.ylabel("Slope: y, dhidden: {}".format(dhidden))
         plt.savefig("prof"+str(inx))
 
-    plt.figure(1)
-    plt.plot(sizes, cumsum)
+    plt.figure(2)
+    plt.plot(sizes, cumsum, 'r-')
     plt.title("Avg Test Slope vs. Number of Trials\nlr: {}, epochs: {}"
               .format(lr, epochs))
     plt.xlabel("Trials: x, din: {}, dowt: {}".format(din, dowt))
