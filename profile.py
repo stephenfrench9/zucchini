@@ -46,16 +46,19 @@ if __name__ == '__main__':
     device = torch.device("cuda:0") #choose hardware
 #    device = torch.device("cpu")
 
-    sizes = [25*i+25 for i in range(40)]
+    sizes = [25*i+25 for i in range(3)]
     t0 = time.time()
-    slopes = run_all(sizes, din, dowt, dhidden, lr, epochs, device)
-    print("total elapsed time: ")
-    print(time.time()-t0)
+
+    for expe in range(10):
+        slopes = run_all(sizes, din, dowt, dhidden, lr, epochs, device)
+        print("total elapsed time: ")
+        print(time.time()-t0)
+        print("Profile prog" + str(expe/10))
     
-    plt.plot(sizes, slopes)
-    plt.title("Test Loss Slope vs. Number of Trials\nlr: {}, epochs: {}"
-              .format(lr, epochs))
-    plt.xlabel("Trials: x, din: {}, dowt: {}".format(din, dowt))
-    plt.ylabel("Slope: y, dhidden: {}".format(dhidden))
-    plt.savefig("nnetworks")
+        plt.plot(sizes, slopes)
+        plt.title("Test Loss Slope vs. Number of Trials\nlr: {}, epochs: {}"
+                  .format(lr, epochs))
+        plt.xlabel("Trials: x, din: {}, dowt: {}".format(din, dowt))
+        plt.ylabel("Slope: y, dhidden: {}".format(dhidden))
+        plt.savefig("prof"+str(expe))
     
