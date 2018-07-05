@@ -51,7 +51,7 @@ if __name__ == '__main__':
     t0 = time.time()
 
     dataset = []
-    experiments = 20
+    experiments = 40
     for expe in range(experiments):
         slopes = run_all(sizes, din, dowt, dhidden, lr, epochs, device)
         print("total elapsed time: ")
@@ -64,7 +64,8 @@ if __name__ == '__main__':
         cumsum = cumsum + it
     cumsum = cumsum/experiments
         
-        
+    np.save('40fitAverageFrank', cumsum)
+    
     for inx, slopes in enumerate(dataset):
         plt.figure(1)
         plt.plot(sizes, slopes)
@@ -85,9 +86,6 @@ if __name__ == '__main__':
 
 
     
-    print(dataset[0])
-    print(dataset[1])
-    print(dataset[2])
-    print(cumsum)
+
         
     
